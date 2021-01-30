@@ -137,8 +137,8 @@ spec:
         configMap:
           name: grafana-cm
           items:
-            - key: micro-integrator-dashboard.json
-              path: micro-integrator-dashboard.json
+            - key: quarkus-metrics.json
+              path: quarkus-metrics.json
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -168,7 +168,7 @@ data:
       updateIntervalSeconds: 5
       options:
         path: /var/lib/grafana/dashboards
-  micro-integrator-dashboard.json: |-
+  quarkus-metrics.json: |-
     {
       "annotations": {
         "list": [
@@ -183,10 +183,10 @@ data:
           }
         ]
       },
-      "description": "This Dashboard provides an overview of WSO2 integration cluster deployment",
       "editable": true,
-      "gnetId": 12783,
+      "gnetId": null,
       "graphTooltip": 0,
+      "id": 2,
       "links": [],
       "panels": [
         {
@@ -204,21 +204,19 @@ data:
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 9,
             "w": 8,
             "x": 0,
             "y": 0
           },
           "hiddenSeries": false,
-          "id": 39,
+          "id": 2,
           "legend": {
-            "alignAsTable": false,
             "avg": false,
             "current": false,
             "max": false,
             "min": false,
-            "rightSide": true,
-            "show": true,
+            "show": false,
             "total": false,
             "values": false
           },
@@ -239,9 +237,9 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "jvm_memory_bytes_used",
+              "expr": "vendor_cpu_systemCpuLoad_percent",
               "interval": "",
-              "legendFormat": "{{area}}",
+              "legendFormat": "",
               "queryType": "randomWalk",
               "refId": "A"
             }
@@ -250,7 +248,7 @@ data:
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Memory used by JVM",
+          "title": "CPU",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -302,13 +300,13 @@ data:
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 9,
             "w": 8,
             "x": 8,
             "y": 0
           },
           "hiddenSeries": false,
-          "id": 41,
+          "id": 4,
           "legend": {
             "avg": false,
             "current": false,
@@ -335,7 +333,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "jvm_classes_loaded",
+              "expr": "sum(vendor_memoryPool_usage_bytes)",
               "interval": "",
               "legendFormat": "",
               "queryType": "randomWalk",
@@ -346,7 +344,7 @@ data:
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Clases loaded by JVM",
+          "title": "Memory",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -398,13 +396,13 @@ data:
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 9,
             "w": 8,
             "x": 16,
             "y": 0
           },
           "hiddenSeries": false,
-          "id": 43,
+          "id": 6,
           "legend": {
             "avg": false,
             "current": false,
@@ -431,7 +429,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "jvm_threads_current",
+              "expr": "base_thread_count",
               "interval": "",
               "legendFormat": "",
               "queryType": "randomWalk",
@@ -442,7 +440,7 @@ data:
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Current threads used by JVM",
+          "title": "Threads",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -478,396 +476,9 @@ data:
             "align": false,
             "alignLevel": null
           }
-        },
-        {
-          "datasource": "Prometheus",
-          "description": "Displays the total request count served by the cluster for the selected time period. Request which resulted in errors will be counted here too.",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {},
-              "displayName": "",
-              "mappings": [
-                {
-                  "from": "",
-                  "id": 1,
-                  "operator": "",
-                  "text": "0",
-                  "to": "",
-                  "type": 1,
-                  "value": "null"
-                }
-              ],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "semi-dark-green",
-                    "value": null
-                  }
-                ]
-              },
-              "unit": "none"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 6,
-            "w": 4,
-            "x": 0,
-            "y": 8
-          },
-          "id": 2,
-          "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "justifyMode": "center",
-            "orientation": "horizontal",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "textMode": "auto"
-          },
-          "pluginVersion": "7.3.7",
-          "scopedVars": {
-            "node": {
-              "selected": true,
-              "text": "demo-validation-deployment-6dcdfc7667-9wbz5",
-              "value": "demo-validation-deployment-6dcdfc7667-9wbz5"
-            }
-          },
-          "targets": [
-            {
-              "expr": "sum(wso2_integration_api_request_count_total)",
-              "interval": "",
-              "legendFormat": "",
-              "queryType": "randomWalk",
-              "refId": "A"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Request Count",
-          "type": "stat"
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "Prometheus",
-          "description": "Displays the error rate occurred at this cluster during the selected time period. ",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {},
-              "links": []
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 6,
-            "w": 19,
-            "x": 4,
-            "y": 8
-          },
-          "hiddenSeries": false,
-          "id": 12,
-          "interval": "",
-          "legend": {
-            "avg": false,
-            "current": false,
-            "hideEmpty": false,
-            "max": false,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null as zero",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.3.7",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "scopedVars": {
-            "node": {
-              "selected": true,
-              "text": "demo-validation-deployment-6dcdfc7667-9wbz5",
-              "value": "demo-validation-deployment-6dcdfc7667-9wbz5"
-            }
-          },
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "rate(wso2_integration_api_request_count_total[5m])",
-              "interval": "",
-              "legendFormat": "{{invocation_url}}",
-              "queryType": "randomWalk",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Requests per resource each 5 minutes",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": null,
-              "format": "reqps",
-              "label": "TPS",
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "datasource": "Prometheus",
-          "description": "Displays the total error count occurred in this cluster for the selected time period",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {},
-              "mappings": [
-                {
-                  "from": "",
-                  "id": 1,
-                  "operator": "",
-                  "text": "0",
-                  "to": "",
-                  "type": 1,
-                  "value": "null"
-                }
-              ],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "dark-red",
-                    "value": null
-                  }
-                ]
-              },
-              "unit": "none"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 6,
-            "w": 4,
-            "x": 0,
-            "y": 14
-          },
-          "id": 20,
-          "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "auto",
-            "reduceOptions": {
-              "calcs": [
-                "last"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "textMode": "auto"
-          },
-          "pluginVersion": "7.3.7",
-          "scopedVars": {
-            "node": {
-              "selected": true,
-              "text": "demo-validation-deployment-6dcdfc7667-9wbz5",
-              "value": "demo-validation-deployment-6dcdfc7667-9wbz5"
-            }
-          },
-          "targets": [
-            {
-              "expr": "sum(wso2_integration_api_request_count_error_total)",
-              "interval": "",
-              "legendFormat": "",
-              "queryType": "randomWalk",
-              "refId": "A"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Error Count",
-          "type": "stat"
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "Prometheus",
-          "description": "Displays the request rate received by cluster during the selected time period. This will also include error requests. ",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {},
-              "links": []
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 6,
-            "w": 20,
-            "x": 4,
-            "y": 14
-          },
-          "hiddenSeries": false,
-          "id": 9,
-          "interval": "",
-          "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null as zero",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.3.7",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "scopedVars": {
-            "node": {
-              "selected": true,
-              "text": "demo-validation-deployment-6dcdfc7667-9wbz5",
-              "value": "demo-validation-deployment-6dcdfc7667-9wbz5"
-            }
-          },
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum(wso2_integration_api_latency_seconds)by(invocation_url)",
-              "interval": "",
-              "legendFormat": "{{invocation_url}}",
-              "queryType": "randomWalk",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Total latency seconds by URL",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": 0,
-              "format": "reqps",
-              "label": "TPS",
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "collapsed": false,
-          "datasource": "${DS_PROMETHEUS}",
-          "gridPos": {
-            "h": 1,
-            "w": 24,
-            "x": 0,
-            "y": 20
-          },
-          "id": 4,
-          "panels": [],
-          "repeat": "node",
-          "scopedVars": {
-            "node": {
-              "selected": true,
-              "text": "demo-validation-deployment-6dcdfc7667-9wbz5",
-              "value": "demo-validation-deployment-6dcdfc7667-9wbz5"
-            }
-          },
-          "title": "",
-          "type": "row"
         }
       ],
-      "refresh": "10s",
+      "refresh": "5s",
       "schemaVersion": 26,
       "style": "dark",
       "tags": [],
@@ -875,24 +486,12 @@ data:
         "list": []
       },
       "time": {
-        "from": "now-15m",
+        "from": "now-5m",
         "to": "now"
       },
-      "timepicker": {
-        "refresh_intervals": [
-          "10s",
-          "30s",
-          "1m",
-          "5m",
-          "15m",
-          "30m",
-          "1h",
-          "2h",
-          "1d"
-        ]
-      },
+      "timepicker": {},
       "timezone": "",
-      "title": "WSO2 Integration Cluster Metrics",
-      "uid": "wso2-mi-cluster-metrics",
+      "title": "Quarkus metrics (on VM) Copy",
+      "uid": "KaiwgpYMz",
       "version": 1
     }
