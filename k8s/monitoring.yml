@@ -236,7 +236,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "vendor_cpu_systemCpuLoad_percent",
+              "expr": "vendor_cpu_systemCpuLoad_percent * 100",
               "interval": "",
               "legendFormat": "",
               "queryType": "randomWalk",
