@@ -1,3 +1,5 @@
+![Quarkus CI JVM](https://github.com/serrodcal/quarkus-prometheus-grafana/workflows/Quarkus%20CI%20JVM/badge.svg)
+
 # quarkus-metrics project
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
