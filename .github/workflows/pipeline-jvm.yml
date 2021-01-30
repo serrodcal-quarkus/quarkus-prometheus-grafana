@@ -1,0 +1,71 @@
+name: Quarkus CI JVM
+
+# Run this workflow every time a new commit pushed to your repository
+on: push
+
+jobs:
+  # Set the job key. The key is displayed as the job name
+  # when a job name is not provided
+  quarkus-ci:
+    # Name the Job
+    name: Quarkus CI JVM
+    # Set the type of machine to run on
+    runs-on: ubuntu-20.04
+
+    steps:
+      # Checks out a copy of your repository on the ubuntu-latest machine
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Set up JDK 11
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      # Compile
+      - name: Compile with Maven
+        run: mvn --batch-mode --update-snapshots compile
+
+      # Test
+      - name: Test with Maven
+        run: mvn --batch-mode --update-snapshots test
+
+      # Build
+      - name: Build with Maven
+        run: mvn --batch-mode --update-snapshots verify
+
+      # Set up QEMU
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      # Set up Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      # Login to DockerHub
+      - name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Get current time
+      - name: Get current time
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYYMMDD-HHMMSS
+          utcOffset: "+01:00"
+
+      # Build and push a JVM image
+      - name: Build and push JVM image
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./src/main/docker/Dockerfile.jvm
+          push: true
+          tags: |
+            serrodcal/quarkus-metrics:latest
+            serrodcal/quarkus-metrics:${{ steps.current-time.outputs.formattedTime }}-jvm
